@@ -155,62 +155,7 @@ def depthFirstSearch(filename):
                 else:
                     stack.append(childNode)
     return []
-
-
-def testDepthFirstSearch(filename):
-    maze = Maze(filename)
-    initNode = Node(Action.Init, maze.startX, maze.startY)
-    stack = []                # queue
-    stack.append(initNode)
-    explored = []
-    while(stack):
-        parentNode = stack.pop()
-        #print("X: %d" % parentNode.x)
-        #print("Y: %d" % parentNode.y)
-        flag1 = False
-        flag2 = False
-        for node in stack:
-            if node.x == parentNode.x and node.y == parentNode.y:
-                flag1 = True
-        for node in explored:
-            if node.x == parentNode.x and node.y == parentNode.y:
-                flag2 = True
-        if(not (flag1 or flag2)):
-            if(maze.getLocation(parentNode.x, parentNode.y) == Location.Destination): # goal test
-                print(parentNode.path_cost)
-                solution = [] 
-                backTrackNodeCoordX, backTrackNodeCoordY = parentNode.getParentCoordinates()
-                while(maze.getLocation(backTrackNodeCoordX, backTrackNodeCoordY) != Location.Start):
-                    for exploredNode in explored:
-                        if(exploredNode.x == backTrackNodeCoordX and exploredNode.y == backTrackNodeCoordY):
-                            solution.append((exploredNode.x, exploredNode.y, exploredNode.action))
-                            backTrackNodeCoordX, backTrackNodeCoordY = exploredNode.getParentCoordinates()                
-                return solution
-            explored.append(parentNode)
-            possibleActions =  [Action.Left, Action.Right, Action.Up, Action.Down]
-            if(parentNode.action != Action.Init):
-                possibleActions.remove(oppositeDirection(parentNode.action))
-            for action in possibleActions:
-                childNode = Node(action, parentNode.x, parentNode.y, parentNode.path_cost)
-                if(maze.mazeMap[childNode.y][childNode.x] == Location.Wall
-                   or maze.getLocation(childNode.x, childNode.y) == Location.Start):
-                    continue
-                else:
-                    stack.append(childNode)
-    return []
-
-def test(filename):
-    solution = testDepthFirstSearch(filename)
-    for (x, y, state) in reversed(solution):    
-        print("(%d, %d) " % (x,y), end=' ' )
-        if(state == Action.Left):
-            print("left")
-        if(state == Action.Right):
-            print("right")
-        if(state == Action.Up):
-            print("up")
-        if(state == Action.Down):
-            print("down")            
+            
 class DLSResult(Enum):
     Cutoff = 1
     Failure = 2
